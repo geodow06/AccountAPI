@@ -19,9 +19,10 @@ public class AccountService {
 		this.repo = repo;
 	}
 
-	public String createAccount(Account account) {
+	public Account createAccount(Account account) {
 		repo.save(account); 
-		return "Account "+account.getFirstname()+" "+account.getLastname()+" created";
+//		return "Account "+account.getFirstname()+" "+account.getLastname()+" created"; 
+		return account;
 	}
 
 	public Account getAccount(Long id) {

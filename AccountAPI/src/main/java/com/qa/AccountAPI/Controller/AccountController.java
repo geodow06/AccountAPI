@@ -36,7 +36,7 @@ public class AccountController {
 	}
 
 	@PostMapping("/createAccount")
-	public String createAccount(@RequestBody Account account) {
+	public Account createAccount(@RequestBody Account account) {
 		account.setAccountNumber(getAccNum());
 		return svc.createAccount(account);
 	}
