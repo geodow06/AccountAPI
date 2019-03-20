@@ -10,14 +10,19 @@ public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	private String firstname;
+	private String lastname;
 	private String accountNumber;
 
-	public Account(Long id, String accountNumber) {
+	public Account(String firstname, String lastname) {
 		super();
-		this.id = id;
-		this.accountNumber = accountNumber;
-	}
+		
+		this.firstname = firstname;
+		this.lastname = lastname;
+		
+	} 
+	
+	
 
 	public Long getId() {
 		return id;
@@ -25,6 +30,22 @@ public class Account {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getFirstname() {
+		return firstname;
+	}
+
+	public void setFirstname(String firstname) {
+		this.firstname = firstname;
+	}
+
+	public String getLastname() {
+		return lastname;
+	}
+
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 
 	public String getAccountNumber() {
@@ -37,7 +58,8 @@ public class Account {
 
 	@Override
 	public String toString() {
-		return String.format("Account[id=" + id + ", accountNumber=" + accountNumber + "]", id, accountNumber);
+		return String.format("Account[id=" + id + ", firstname=" + firstname + ", lastname=" + lastname
+				+ ", accountNumber=" + accountNumber + "]", id, accountNumber);
 	}
 
 }
