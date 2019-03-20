@@ -33,19 +33,29 @@ public class AccountController {
 
 	}
 
-	@Autowired
-	RestTemplate restTemplate;
+//	@Autowired
+//	RestTemplate restTemplate;
+
+	private RestTemplate rest;
+
+	public RestTemplate getRestTemplate() {
+		return rest;
+	}
+
+	public AccountController(RestTemplate rest) {
+		this.rest = rest;
+	}
 
 	@GetMapping(value = "/getAccNum")
 	public String getAccNum() {
 
-		return restTemplate.exchange("http://localhost:8081/getAccNum", HttpMethod.GET, null, String.class).getBody();
+		return rest.exchange("http://localhost:8081/getAccNum", HttpMethod.GET, null, String.class).getBody();
+
 	}
 
 	@PostMapping(value = "/checkPrize/{accountNumber}")
 	public String createAccount(@PathVariable("accountNumber") String accountNumber) {
-		return restTemplate
-				.exchange("http://localhost:8082/checkPrize/" + accountNumber, HttpMethod.POST, null, String.class)
+		return rest.exchange("http://localhost:8082/checkPrize/" + accountNumber, HttpMethod.POST, null, String.class)
 				.getBody();
 
 	}
