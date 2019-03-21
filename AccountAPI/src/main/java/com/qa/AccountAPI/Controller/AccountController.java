@@ -1,8 +1,8 @@
 package com.qa.AccountAPI.Controller;
 
-import java.util.Arrays;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,15 +18,23 @@ import com.qa.AccountAPI.Service.AccountService;
 
 @RestController
 public class AccountController {
-
+	@Autowired
 	private AccountService svc;
 
+	@Autowired
 	private RestTemplate rest;
-
-	public AccountController(AccountService svc, RestTemplateBuilder rest) {
-		this.svc = svc;
-		this.rest = rest.build();
-	}
+	
+//	public AccountService getAccountService() {
+//		return svc;
+//	} 
+//	public RestTemplate getRestTemplate() { 
+//		return rest;
+//	}
+ 
+//	public AccountController(AccountService svc, RestTemplate rest) {
+//		this.svc = svc;
+//		this.rest = rest;
+//	}
 
 	@PostMapping(value = "/checkPrize/{accountNumber}")
 	public String checkPrize(@PathVariable("accountNumber") String accountNumber) {
@@ -42,8 +50,8 @@ public class AccountController {
 	}
 
 	@DeleteMapping("/deleteAccount/{id}")
-	public void deleteAccount(@PathVariable Long id) {
-		svc.deleteAccount(id);
+	public boolean deleteAccount(@PathVariable Long id) {
+		return svc.deleteAccount(id);
 	}
 
 //	@Autowired
@@ -55,21 +63,18 @@ public class AccountController {
 	}
 
 	@GetMapping("/getAccount/{id}")
-	public void getAccount(@PathVariable Long id) {
-		svc.getAccount(id);
+	public Account getAccount(@PathVariable Long id) {
+		return svc.getAccount(id);
 	}
 
 	@GetMapping("/getAllAccounts")
-	public void getAllAccounts() {
-		svc.getAllAccounts();
-	}
-
-	public RestTemplate getRestTemplate() {
-		return rest;
+	public List<Account> getAllAccounts() {
+		return svc.getAllAccounts();
 	}
 
 	@PostMapping("/updateAccount/{id}/{account}")
-	public void updateAccount(@PathVariable Long id, @PathVariable Account account) {
+	public String updateAccount(@PathVariable Long id, @PathVariable Account account) {
 		svc.updateAccount(account, id);
+		return "Account " + account.getFirstname() + " updated";
 	}
 }

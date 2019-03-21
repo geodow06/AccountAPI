@@ -2,6 +2,7 @@ package com.qa.AccountAPI.Service;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.qa.AccountAPI.Entities.Account;
@@ -9,19 +10,11 @@ import com.qa.AccountAPI.Repository.AccountRepository;
 
 @Service
 public class AccountService {
+	@Autowired
 	private AccountRepository repo;
 
-	public AccountRepository getAccountRepository() {
-		return repo;
-	}
-
-	public AccountService(AccountRepository repo) {
-		this.repo = repo;
-	}
-
 	public Account createAccount(Account account) {
-		repo.save(account); 
-//		return "Account "+account.getFirstname()+" "+account.getLastname()+" created"; 
+		repo.save(account);
 		return account;
 	}
 
@@ -40,7 +33,8 @@ public class AccountService {
 		return "Account " + id + " updated";
 	}
 
-	public void deleteAccount(Long id) {
+	public boolean deleteAccount(Long id) {
 		repo.deleteById(id);
+		return repo.existsById(id);
 	}
 }
