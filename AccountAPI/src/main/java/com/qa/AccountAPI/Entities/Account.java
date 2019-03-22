@@ -13,16 +13,17 @@ public class Account {
 	private String firstname;
 	private String lastname;
 	private String accountNumber;
-
-	public Account(String firstname, String lastname) {
-		super();
+	
+	public Account() { 
 		
+	}
+	
+	public Account(String firstname, String lastname) {
+
 		this.firstname = firstname;
 		this.lastname = lastname;
-		
-	} 
-	
-	
+
+	}
 
 	public Long getId() {
 		return id;

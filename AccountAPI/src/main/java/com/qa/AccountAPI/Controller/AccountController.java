@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,27 +19,23 @@ import com.qa.AccountAPI.Service.AccountService;
 
 @RestController
 public class AccountController {
-	@Autowired
+
 	private AccountService svc;
 
-	@Autowired
-	private RestTemplate rest;
-	
-//	public AccountService getAccountService() {
-//		return svc;
-//	} 
-//	public RestTemplate getRestTemplate() { 
-//		return rest;
-//	}
- 
-//	public AccountController(AccountService svc, RestTemplate rest) {
-//		this.svc = svc;
-//		this.rest = rest;
-//	}
+	private RestTemplateBuilder rest;
+
+	private JmsTemplate jms;
+
+	public AccountController(AccountService svc, RestTemplateBuilder rest, JmsTemplate jms) {
+		this.svc = svc;
+		this.rest = rest;
+		this.jms = jms;
+	}
 
 	@PostMapping(value = "/checkPrize/{accountNumber}")
 	public String checkPrize(@PathVariable("accountNumber") String accountNumber) {
-		return rest.exchange("http://localhost:8082/checkPrize/" + accountNumber, HttpMethod.POST, null, String.class)
+		return rest.build()
+				.exchange("http://localhost:8082/checkPrize/" + accountNumber, HttpMethod.POST, null, String.class)
 				.getBody();
 
 	}
@@ -46,7 +43,9 @@ public class AccountController {
 	@PostMapping("/createAccount")
 	public Account createAccount(@RequestBody Account account) {
 		account.setAccountNumber(getAccNum());
-		return svc.createAccount(account);
+		Account acc = svc.createAccount(account);
+		jms.convertAndSend("Account", acc);
+		return acc;
 	}
 
 	@DeleteMapping("/deleteAccount/{id}")
@@ -59,7 +58,7 @@ public class AccountController {
 
 	@GetMapping(value = "/getAccNum")
 	public String getAccNum() {
-		return rest.exchange("http://localhost:8081/getAccNum", HttpMethod.GET, null, String.class).getBody();
+		return rest.build().exchange("http://localhost:8081/getAccNum", HttpMethod.GET, null, String.class).getBody();
 	}
 
 	@GetMapping("/getAccount/{id}")

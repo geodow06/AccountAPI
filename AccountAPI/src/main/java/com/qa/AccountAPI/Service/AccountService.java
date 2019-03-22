@@ -3,6 +3,7 @@ package com.qa.AccountAPI.Service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import com.qa.AccountAPI.Entities.Account;
@@ -10,11 +11,15 @@ import com.qa.AccountAPI.Repository.AccountRepository;
 
 @Service
 public class AccountService {
+	
 	@Autowired
 	private AccountRepository repo;
 
+	
+
 	public Account createAccount(Account account) {
 		repo.save(account);
+		
 		return account;
 	}
 
